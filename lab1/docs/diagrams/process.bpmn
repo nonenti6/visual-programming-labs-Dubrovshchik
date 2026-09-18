@@ -30,9 +30,10 @@
         <bpmn:flowNodeRef>EndEvent_Cancelled</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Gateway_Parallel_Join</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Task_Telemetry</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_OpenCar</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Activity_0ta1u38</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>EndEvent_Success</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>Task_OpenCar</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Activity_1tcnnbu</bpmn:flowNodeRef>
       </bpmn:lane>
     </bpmn:laneSet>
     <bpmn:task id="Task_ShowCars" name="Показать карту с доступными авто">
@@ -115,11 +116,7 @@
       <bpmn:incoming>Flow_ParallelJoin_EndRental</bpmn:incoming>
       <bpmn:outgoing>Flow_1oe8j66</bpmn:outgoing>
     </bpmn:task>
-    <bpmn:sequenceFlow id="Flow_EndRental_Success" sourceRef="Activity_0ta1u38" targetRef="EndEvent_Success" />
-    <bpmn:task id="Activity_0ta1u38" name="Закрыть двери">
-      <bpmn:incoming>Flow_1oe8j66</bpmn:incoming>
-      <bpmn:outgoing>Flow_EndRental_Success</bpmn:outgoing>
-    </bpmn:task>
+    <bpmn:sequenceFlow id="Flow_EndRental_Success" sourceRef="Activity_0ta1u38" targetRef="Activity_1tcnnbu" />
     <bpmn:sequenceFlow id="Flow_1oe8j66" sourceRef="Task_EndRental" targetRef="Activity_0ta1u38" />
     <bpmn:sequenceFlow id="Flow_StartedYes_OpenCar" name="Да" sourceRef="Gateway_Started" targetRef="Task_OpenCar" />
     <bpmn:sequenceFlow id="Flow_CheckCar_Gateway" sourceRef="Task_CheckCar" targetRef="Gateway_CarAvailable" />
@@ -152,12 +149,21 @@
       <bpmn:incoming>Flow_StartedNo_Cancel</bpmn:incoming>
       <bpmn:outgoing>Flow_Cancel_Cancelled</bpmn:outgoing>
     </bpmn:task>
-    <bpmn:endEvent id="EndEvent_Success" name="Аренда завершена">
-      <bpmn:incoming>Flow_EndRental_Success</bpmn:incoming>
-    </bpmn:endEvent>
     <bpmn:task id="Task_OpenCar" name="Открыть автомобиль (Bluetooth / QR)">
       <bpmn:incoming>Flow_StartedYes_OpenCar</bpmn:incoming>
       <bpmn:outgoing>Flow_OpenCar_Photo</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:task id="Activity_0ta1u38" name="Закрыть двери">
+      <bpmn:incoming>Flow_1oe8j66</bpmn:incoming>
+      <bpmn:outgoing>Flow_EndRental_Success</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:sequenceFlow id="Flow_0kcs6uj" sourceRef="Activity_1tcnnbu" targetRef="EndEvent_Success" />
+    <bpmn:endEvent id="EndEvent_Success" name="Аренда завершена">
+      <bpmn:incoming>Flow_0kcs6uj</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:task id="Activity_1tcnnbu" name="Сформировать чек и отправить клиенту">
+      <bpmn:incoming>Flow_EndRental_Success</bpmn:incoming>
+      <bpmn:outgoing>Flow_0kcs6uj</bpmn:outgoing>
     </bpmn:task>
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_Carsharing">
@@ -175,17 +181,8 @@
       <bpmndi:BPMNShape id="Lane_Client_di" bpmnElement="Lane_Client" isHorizontal="true">
         <dc:Bounds x="160" y="80" width="2515" height="205" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Task_Authorization_di" bpmnElement="Task_Authorization">
-        <dc:Bounds x="290" y="140" width="180" height="80" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Task_ShowCars_di" bpmnElement="Task_ShowCars">
         <dc:Bounds x="430" y="345" width="170" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Task_CheckCar_di" bpmnElement="Task_CheckCar">
-        <dc:Bounds x="760" y="540" width="180" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Task_Book_di" bpmnElement="Task_Book">
-        <dc:Bounds x="1070" y="540" width="170" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Task_Photo_di" bpmnElement="Task_Photo">
         <dc:Bounds x="1380" y="140" width="170" height="80" />
@@ -194,18 +191,6 @@
         <dc:Bounds x="530" y="555" width="50" height="50" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="590" y="566.5" width="56" height="27" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Gateway_CarAvailable_di" bpmnElement="Gateway_CarAvailable" isMarkerVisible="true">
-        <dc:Bounds x="980" y="555" width="50" height="50" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="973" y="518" width="63" height="27" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Gateway_Started_di" bpmnElement="Gateway_Started" isMarkerVisible="true">
-        <dc:Bounds x="1280" y="555" width="50" height="50" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="1258" y="525" width="95" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Task_SelectCar_di" bpmnElement="Task_SelectCar">
@@ -217,11 +202,11 @@
           <dc:Bounds x="188" y="200" width="63" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Authorization_di" bpmnElement="Task_Authorization">
+        <dc:Bounds x="290" y="140" width="180" height="80" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Task_Alternative_di" bpmnElement="Task_Alternative">
         <dc:Bounds x="620" y="345" width="200" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Task_CancelBooking_di" bpmnElement="Task_CancelBooking">
-        <dc:Bounds x="1360" y="540" width="180" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Task_Price_di" bpmnElement="Task_Price">
         <dc:Bounds x="1780" y="720" width="200" height="60" />
@@ -233,12 +218,6 @@
         <dc:Bounds x="1810" y="615" width="50" height="50" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="1855" y="613" width="70" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="EndEvent_Cancelled_di" bpmnElement="EndEvent_Cancelled">
-        <dc:Bounds x="1432" y="732" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="1421" y="775" width="63" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_Parallel_Join_di" bpmnElement="Gateway_Parallel_Join" isMarkerVisible="true">
@@ -258,18 +237,49 @@
         <dc:Bounds x="2255" y="140" width="190" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_0bi585a" bpmnElement="Activity_0ta1u38">
-        <dc:Bounds x="2445" y="600" width="190" height="80" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="EndEvent_Success_di" bpmnElement="EndEvent_Success">
-        <dc:Bounds x="2522" y="732" width="36" height="36" />
+      <bpmndi:BPMNShape id="EndEvent_Cancelled_di" bpmnElement="EndEvent_Cancelled">
+        <dc:Bounds x="1432" y="732" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="2514" y="775" width="57" height="27" />
+          <dc:Bounds x="1421" y="775" width="63" height="14" />
         </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_CheckCar_di" bpmnElement="Task_CheckCar">
+        <dc:Bounds x="760" y="540" width="180" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_CarAvailable_di" bpmnElement="Gateway_CarAvailable" isMarkerVisible="true">
+        <dc:Bounds x="980" y="555" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="973" y="518" width="63" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Book_di" bpmnElement="Task_Book">
+        <dc:Bounds x="1070" y="540" width="170" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_Started_di" bpmnElement="Gateway_Started" isMarkerVisible="true">
+        <dc:Bounds x="1280" y="555" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1258" y="525" width="95" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_CancelBooking_di" bpmnElement="Task_CancelBooking">
+        <dc:Bounds x="1360" y="540" width="180" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Task_OpenCar_di" bpmnElement="Task_OpenCar">
         <dc:Bounds x="1205" y="710" width="200" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_0bi585a" bpmnElement="Activity_0ta1u38">
+        <dc:Bounds x="2445" y="520" width="190" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="EndEvent_Success_di" bpmnElement="EndEvent_Success">
+        <dc:Bounds x="2522" y="752" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2514" y="795" width="57" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_1rjkbjk" bpmnElement="Activity_1tcnnbu">
+        <dc:Bounds x="2445" y="637" width="190" height="80" />
+        <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_Start_Auth_di" bpmnElement="Flow_Start_Auth">
         <di:waypoint x="236" y="175" />
@@ -306,17 +316,6 @@
         <di:waypoint x="850" y="183" />
         <di:waypoint x="850" y="540" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_CheckCar_Gateway_di" bpmnElement="Flow_CheckCar_Gateway">
-        <di:waypoint x="940" y="580" />
-        <di:waypoint x="980" y="580" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_CarYes_Book_di" bpmnElement="Flow_CarYes_Book">
-        <di:waypoint x="1030" y="580" />
-        <di:waypoint x="1070" y="580" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="1040" y="566" width="14" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_CarNo_Alternative_di" bpmnElement="Flow_CarNo_Alternative">
         <di:waypoint x="1005" y="605" />
         <di:waypoint x="1005" y="670" />
@@ -329,28 +328,6 @@
       <bpmndi:BPMNEdge id="Flow_Alternative_SelectCar_di" bpmnElement="Flow_Alternative_SelectCar">
         <di:waypoint x="720" y="345" />
         <di:waypoint x="720" y="223" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_Book_StartedGateway_di" bpmnElement="Flow_Book_StartedGateway">
-        <di:waypoint x="1240" y="580" />
-        <di:waypoint x="1280" y="580" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_StartedYes_OpenCar_di" bpmnElement="Flow_StartedYes_OpenCar">
-        <di:waypoint x="1305" y="605" />
-        <di:waypoint x="1305" y="710" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="1310" y="609" width="14" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_StartedNo_Cancel_di" bpmnElement="Flow_StartedNo_Cancel">
-        <di:waypoint x="1330" y="580" />
-        <di:waypoint x="1360" y="580" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="1335" y="558" width="19" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_Cancel_Cancelled_di" bpmnElement="Flow_Cancel_Cancelled">
-        <di:waypoint x="1450" y="620" />
-        <di:waypoint x="1450" y="732" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_OpenCar_Photo_di" bpmnElement="Flow_OpenCar_Photo">
         <di:waypoint x="1250" y="710" />
@@ -398,13 +375,50 @@
         <di:waypoint x="2350" y="220" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_EndRental_Success_di" bpmnElement="Flow_EndRental_Success">
-        <di:waypoint x="2540" y="680" />
-        <di:waypoint x="2540" y="732" />
+        <di:waypoint x="2540" y="600" />
+        <di:waypoint x="2540" y="637" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1oe8j66_di" bpmnElement="Flow_1oe8j66">
         <di:waypoint x="2445" y="180" />
-        <di:waypoint x="2540" y="180" />
-        <di:waypoint x="2540" y="600" />
+        <di:waypoint x="2590" y="180" />
+        <di:waypoint x="2590" y="520" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_StartedYes_OpenCar_di" bpmnElement="Flow_StartedYes_OpenCar">
+        <di:waypoint x="1305" y="605" />
+        <di:waypoint x="1305" y="710" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1310" y="609" width="14" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_CheckCar_Gateway_di" bpmnElement="Flow_CheckCar_Gateway">
+        <di:waypoint x="940" y="580" />
+        <di:waypoint x="980" y="580" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_CarYes_Book_di" bpmnElement="Flow_CarYes_Book">
+        <di:waypoint x="1030" y="580" />
+        <di:waypoint x="1070" y="580" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1040" y="566" width="14" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Book_StartedGateway_di" bpmnElement="Flow_Book_StartedGateway">
+        <di:waypoint x="1240" y="580" />
+        <di:waypoint x="1280" y="580" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Cancel_Cancelled_di" bpmnElement="Flow_Cancel_Cancelled">
+        <di:waypoint x="1450" y="620" />
+        <di:waypoint x="1450" y="732" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_StartedNo_Cancel_di" bpmnElement="Flow_StartedNo_Cancel">
+        <di:waypoint x="1330" y="580" />
+        <di:waypoint x="1360" y="580" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1335" y="558" width="19" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0kcs6uj_di" bpmnElement="Flow_0kcs6uj">
+        <di:waypoint x="2540" y="717" />
+        <di:waypoint x="2540" y="752" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
