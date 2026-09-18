@@ -1,0 +1,411 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_Carsharing" targetNamespace="http://bpmn.io/schema/bpmn" exporter="bpmn-js (https://demo.bpmn.io)" exporterVersion="18.28.0">
+  <bpmn:collaboration id="Collaboration_Carsharing">
+    <bpmn:participant id="Participant_Carsharing" name="Аренда автомобиля через каршеринговое приложение" processRef="Process_Carsharing" />
+  </bpmn:collaboration>
+  <bpmn:process id="Process_Carsharing" name="Аренда автомобиля через каршеринговое приложение" isExecutable="false">
+    <bpmn:laneSet id="LaneSet_1">
+      <bpmn:lane id="Lane_Client" name="Клиент">
+        <bpmn:flowNodeRef>Task_Authorization</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Photo</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_SelectCar</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>StartEvent_App</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_EndRental</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_App" name="Мобильное приложение">
+        <bpmn:flowNodeRef>Task_ShowCars</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Alternative</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Route</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_Server" name="Сервер каршеринга">
+        <bpmn:flowNodeRef>Task_CheckCar</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Book</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Gateway_Auth</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Gateway_CarAvailable</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Gateway_Started</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_CancelBooking</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Price</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_StartTrip</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Gateway_Parallel_Split</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>EndEvent_Cancelled</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Gateway_Parallel_Join</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Telemetry</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Activity_0ta1u38</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>EndEvent_Success</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_OpenCar</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+    <bpmn:task id="Task_ShowCars" name="Показать карту с доступными авто">
+      <bpmn:incoming>Flow_AuthOK_ShowCars</bpmn:incoming>
+      <bpmn:outgoing>Flow_ShowCars_SelectCar</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:task id="Task_Photo" name="Фотофиксация состояния кузова">
+      <bpmn:incoming>Flow_OpenCar_Photo</bpmn:incoming>
+      <bpmn:outgoing>Flow_Photo_StartTrip</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:exclusiveGateway id="Gateway_Auth" name="Проверка пройдена?">
+      <bpmn:incoming>Flow_Auth_Gateway</bpmn:incoming>
+      <bpmn:outgoing>Flow_AuthOK_ShowCars</bpmn:outgoing>
+      <bpmn:outgoing>Flow_AuthFail_Return</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_Start_Auth" sourceRef="StartEvent_App" targetRef="Task_Authorization" />
+    <bpmn:sequenceFlow id="Flow_Auth_Gateway" sourceRef="Task_Authorization" targetRef="Gateway_Auth" />
+    <bpmn:sequenceFlow id="Flow_AuthOK_ShowCars" name="Да" sourceRef="Gateway_Auth" targetRef="Task_ShowCars" />
+    <bpmn:sequenceFlow id="Flow_AuthFail_Return" name="Нет" sourceRef="Gateway_Auth" targetRef="Task_Authorization" />
+    <bpmn:sequenceFlow id="Flow_ShowCars_SelectCar" sourceRef="Task_ShowCars" targetRef="Task_SelectCar" />
+    <bpmn:sequenceFlow id="Flow_SelectCar_CheckCar" sourceRef="Task_SelectCar" targetRef="Task_CheckCar" />
+    <bpmn:sequenceFlow id="Flow_CarNo_Alternative" name="Нет" sourceRef="Gateway_CarAvailable" targetRef="Task_Alternative" />
+    <bpmn:sequenceFlow id="Flow_Alternative_SelectCar" sourceRef="Task_Alternative" targetRef="Task_SelectCar" />
+    <bpmn:sequenceFlow id="Flow_OpenCar_Photo" sourceRef="Task_OpenCar" targetRef="Task_Photo" />
+    <bpmn:sequenceFlow id="Flow_Photo_StartTrip" sourceRef="Task_Photo" targetRef="Task_StartTrip" />
+    <bpmn:sequenceFlow id="Flow_StartTrip_ParallelSplit" sourceRef="Task_StartTrip" targetRef="Gateway_Parallel_Split" />
+    <bpmn:sequenceFlow id="Flow_ParallelSplit_Telemetry" sourceRef="Gateway_Parallel_Split" targetRef="Task_Telemetry" />
+    <bpmn:sequenceFlow id="Flow_ParallelSplit_Price" sourceRef="Gateway_Parallel_Split" targetRef="Task_Price" />
+    <bpmn:sequenceFlow id="Flow_ParallelSplit_Route" sourceRef="Gateway_Parallel_Split" targetRef="Task_Route" />
+    <bpmn:sequenceFlow id="Flow_Telemetry_ParallelJoin" sourceRef="Task_Telemetry" targetRef="Gateway_Parallel_Join" />
+    <bpmn:sequenceFlow id="Flow_Price_ParallelJoin" sourceRef="Task_Price" targetRef="Gateway_Parallel_Join" />
+    <bpmn:sequenceFlow id="Flow_Route_ParallelJoin" sourceRef="Task_Route" targetRef="Gateway_Parallel_Join" />
+    <bpmn:sequenceFlow id="Flow_ParallelJoin_EndRental" sourceRef="Gateway_Parallel_Join" targetRef="Task_EndRental" />
+    <bpmn:task id="Task_SelectCar" name="Клиент выбирает автомобиль">
+      <bpmn:incoming>Flow_ShowCars_SelectCar</bpmn:incoming>
+      <bpmn:incoming>Flow_Alternative_SelectCar</bpmn:incoming>
+      <bpmn:outgoing>Flow_SelectCar_CheckCar</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:startEvent id="StartEvent_App" name="Запуск приложения">
+      <bpmn:outgoing>Flow_Start_Auth</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:task id="Task_Authorization" name="Авторизация с проверкой водительского удостоверения">
+      <bpmn:incoming>Flow_Start_Auth</bpmn:incoming>
+      <bpmn:incoming>Flow_AuthFail_Return</bpmn:incoming>
+      <bpmn:outgoing>Flow_Auth_Gateway</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:task id="Task_Alternative" name="Предложить альтернативный автомобиль">
+      <bpmn:incoming>Flow_CarNo_Alternative</bpmn:incoming>
+      <bpmn:outgoing>Flow_Alternative_SelectCar</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:task id="Task_Price" name="Рассчитывать стоимость по минутам">
+      <bpmn:incoming>Flow_ParallelSplit_Price</bpmn:incoming>
+      <bpmn:outgoing>Flow_Price_ParallelJoin</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:task id="Task_StartTrip" name="Запустить двигатель и начать тарификацию">
+      <bpmn:incoming>Flow_Photo_StartTrip</bpmn:incoming>
+      <bpmn:outgoing>Flow_StartTrip_ParallelSplit</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:parallelGateway id="Gateway_Parallel_Split" name="Параллельно">
+      <bpmn:incoming>Flow_StartTrip_ParallelSplit</bpmn:incoming>
+      <bpmn:outgoing>Flow_ParallelSplit_Telemetry</bpmn:outgoing>
+      <bpmn:outgoing>Flow_ParallelSplit_Price</bpmn:outgoing>
+      <bpmn:outgoing>Flow_ParallelSplit_Route</bpmn:outgoing>
+    </bpmn:parallelGateway>
+    <bpmn:parallelGateway id="Gateway_Parallel_Join">
+      <bpmn:incoming>Flow_Telemetry_ParallelJoin</bpmn:incoming>
+      <bpmn:incoming>Flow_Price_ParallelJoin</bpmn:incoming>
+      <bpmn:incoming>Flow_Route_ParallelJoin</bpmn:incoming>
+      <bpmn:outgoing>Flow_ParallelJoin_EndRental</bpmn:outgoing>
+    </bpmn:parallelGateway>
+    <bpmn:task id="Task_Telemetry" name="Передавать телеметрию в диспетчерскую">
+      <bpmn:incoming>Flow_ParallelSplit_Telemetry</bpmn:incoming>
+      <bpmn:outgoing>Flow_Telemetry_ParallelJoin</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:task id="Task_Route" name="Строить маршрут и отслеживать зоны парковки">
+      <bpmn:incoming>Flow_ParallelSplit_Route</bpmn:incoming>
+      <bpmn:outgoing>Flow_Route_ParallelJoin</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:task id="Task_EndRental" name="Завершить аренду">
+      <bpmn:incoming>Flow_ParallelJoin_EndRental</bpmn:incoming>
+      <bpmn:outgoing>Flow_1oe8j66</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:sequenceFlow id="Flow_EndRental_Success" sourceRef="Activity_0ta1u38" targetRef="EndEvent_Success" />
+    <bpmn:task id="Activity_0ta1u38" name="Закрыть двери">
+      <bpmn:incoming>Flow_1oe8j66</bpmn:incoming>
+      <bpmn:outgoing>Flow_EndRental_Success</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:sequenceFlow id="Flow_1oe8j66" sourceRef="Task_EndRental" targetRef="Activity_0ta1u38" />
+    <bpmn:sequenceFlow id="Flow_StartedYes_OpenCar" name="Да" sourceRef="Gateway_Started" targetRef="Task_OpenCar" />
+    <bpmn:sequenceFlow id="Flow_CheckCar_Gateway" sourceRef="Task_CheckCar" targetRef="Gateway_CarAvailable" />
+    <bpmn:sequenceFlow id="Flow_CarYes_Book" name="Да" sourceRef="Gateway_CarAvailable" targetRef="Task_Book" />
+    <bpmn:sequenceFlow id="Flow_Book_StartedGateway" sourceRef="Task_Book" targetRef="Gateway_Started" />
+    <bpmn:sequenceFlow id="Flow_Cancel_Cancelled" sourceRef="Task_CancelBooking" targetRef="EndEvent_Cancelled" />
+    <bpmn:sequenceFlow id="Flow_StartedNo_Cancel" name="Нет" sourceRef="Gateway_Started" targetRef="Task_CancelBooking" />
+    <bpmn:endEvent id="EndEvent_Cancelled" name="Бронь снята">
+      <bpmn:incoming>Flow_Cancel_Cancelled</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:task id="Task_CheckCar" name="Проверить статус и исправность авто">
+      <bpmn:incoming>Flow_SelectCar_CheckCar</bpmn:incoming>
+      <bpmn:outgoing>Flow_CheckCar_Gateway</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:exclusiveGateway id="Gateway_CarAvailable" name="Автомобиль доступен?">
+      <bpmn:incoming>Flow_CheckCar_Gateway</bpmn:incoming>
+      <bpmn:outgoing>Flow_CarYes_Book</bpmn:outgoing>
+      <bpmn:outgoing>Flow_CarNo_Alternative</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:task id="Task_Book" name="Забронировать авто на 15 минут">
+      <bpmn:incoming>Flow_CarYes_Book</bpmn:incoming>
+      <bpmn:outgoing>Flow_Book_StartedGateway</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:exclusiveGateway id="Gateway_Started" name="Поездка начата за 15 минут?">
+      <bpmn:incoming>Flow_Book_StartedGateway</bpmn:incoming>
+      <bpmn:outgoing>Flow_StartedYes_OpenCar</bpmn:outgoing>
+      <bpmn:outgoing>Flow_StartedNo_Cancel</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:task id="Task_CancelBooking" name="Автоматически снять бронь">
+      <bpmn:incoming>Flow_StartedNo_Cancel</bpmn:incoming>
+      <bpmn:outgoing>Flow_Cancel_Cancelled</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:endEvent id="EndEvent_Success" name="Аренда завершена">
+      <bpmn:incoming>Flow_EndRental_Success</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:task id="Task_OpenCar" name="Открыть автомобиль (Bluetooth / QR)">
+      <bpmn:incoming>Flow_StartedYes_OpenCar</bpmn:incoming>
+      <bpmn:outgoing>Flow_OpenCar_Photo</bpmn:outgoing>
+    </bpmn:task>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_Carsharing">
+    <bpmndi:BPMNPlane id="BPMNPlane_Carsharing" bpmnElement="Collaboration_Carsharing">
+      <bpmndi:BPMNShape id="Participant_Carsharing_di" bpmnElement="Participant_Carsharing" isHorizontal="true">
+        <dc:Bounds x="130" y="80" width="2545" height="750" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_Server_di" bpmnElement="Lane_Server" isHorizontal="true">
+        <dc:Bounds x="160" y="490" width="2515" height="340" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_App_di" bpmnElement="Lane_App" isHorizontal="true">
+        <dc:Bounds x="160" y="285" width="2515" height="205" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_Client_di" bpmnElement="Lane_Client" isHorizontal="true">
+        <dc:Bounds x="160" y="80" width="2515" height="205" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Authorization_di" bpmnElement="Task_Authorization">
+        <dc:Bounds x="290" y="140" width="180" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_ShowCars_di" bpmnElement="Task_ShowCars">
+        <dc:Bounds x="430" y="345" width="170" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_CheckCar_di" bpmnElement="Task_CheckCar">
+        <dc:Bounds x="760" y="540" width="180" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Book_di" bpmnElement="Task_Book">
+        <dc:Bounds x="1070" y="540" width="170" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Photo_di" bpmnElement="Task_Photo">
+        <dc:Bounds x="1380" y="140" width="170" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_Auth_di" bpmnElement="Gateway_Auth" isMarkerVisible="true">
+        <dc:Bounds x="530" y="555" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="590" y="566.5" width="56" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_CarAvailable_di" bpmnElement="Gateway_CarAvailable" isMarkerVisible="true">
+        <dc:Bounds x="980" y="555" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="973" y="518" width="63" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_Started_di" bpmnElement="Gateway_Started" isMarkerVisible="true">
+        <dc:Bounds x="1280" y="555" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1258" y="525" width="95" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_SelectCar_di" bpmnElement="Task_SelectCar">
+        <dc:Bounds x="640" y="143" width="160" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="StartEvent_App_di" bpmnElement="StartEvent_App">
+        <dc:Bounds x="200" y="157" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="188" y="200" width="63" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Alternative_di" bpmnElement="Task_Alternative">
+        <dc:Bounds x="620" y="345" width="200" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_CancelBooking_di" bpmnElement="Task_CancelBooking">
+        <dc:Bounds x="1360" y="540" width="180" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Price_di" bpmnElement="Task_Price">
+        <dc:Bounds x="1780" y="720" width="200" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_StartTrip_di" bpmnElement="Task_StartTrip">
+        <dc:Bounds x="1560" y="600" width="200" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_Parallel_Split_di" bpmnElement="Gateway_Parallel_Split" isMarkerVisible="true">
+        <dc:Bounds x="1810" y="615" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1855" y="613" width="70" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="EndEvent_Cancelled_di" bpmnElement="EndEvent_Cancelled">
+        <dc:Bounds x="1432" y="732" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1421" y="775" width="63" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_Parallel_Join_di" bpmnElement="Gateway_Parallel_Join" isMarkerVisible="true">
+        <dc:Bounds x="2245" y="615" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2305" y="633" width="80" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Telemetry_di" bpmnElement="Task_Telemetry">
+        <dc:Bounds x="1960" y="610" width="200" height="60" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Route_di" bpmnElement="Task_Route">
+        <dc:Bounds x="1735" y="345" width="200" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_EndRental_di" bpmnElement="Task_EndRental">
+        <dc:Bounds x="2255" y="140" width="190" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_0bi585a" bpmnElement="Activity_0ta1u38">
+        <dc:Bounds x="2445" y="600" width="190" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="EndEvent_Success_di" bpmnElement="EndEvent_Success">
+        <dc:Bounds x="2522" y="732" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2514" y="775" width="57" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_OpenCar_di" bpmnElement="Task_OpenCar">
+        <dc:Bounds x="1205" y="710" width="200" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_Start_Auth_di" bpmnElement="Flow_Start_Auth">
+        <di:waypoint x="236" y="175" />
+        <di:waypoint x="290" y="175" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Auth_Gateway_di" bpmnElement="Flow_Auth_Gateway">
+        <di:waypoint x="330" y="220" />
+        <di:waypoint x="330" y="640" />
+        <di:waypoint x="555" y="640" />
+        <di:waypoint x="555" y="605" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_AuthOK_ShowCars_di" bpmnElement="Flow_AuthOK_ShowCars">
+        <di:waypoint x="555" y="555" />
+        <di:waypoint x="555" y="425" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="563" y="533" width="14" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_AuthFail_Return_di" bpmnElement="Flow_AuthFail_Return">
+        <di:waypoint x="530" y="580" />
+        <di:waypoint x="400" y="580" />
+        <di:waypoint x="400" y="220" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="500" y="563" width="19" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_ShowCars_SelectCar_di" bpmnElement="Flow_ShowCars_SelectCar">
+        <di:waypoint x="550" y="345" />
+        <di:waypoint x="550" y="183" />
+        <di:waypoint x="640" y="183" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_SelectCar_CheckCar_di" bpmnElement="Flow_SelectCar_CheckCar">
+        <di:waypoint x="800" y="183" />
+        <di:waypoint x="850" y="183" />
+        <di:waypoint x="850" y="540" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_CheckCar_Gateway_di" bpmnElement="Flow_CheckCar_Gateway">
+        <di:waypoint x="940" y="580" />
+        <di:waypoint x="980" y="580" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_CarYes_Book_di" bpmnElement="Flow_CarYes_Book">
+        <di:waypoint x="1030" y="580" />
+        <di:waypoint x="1070" y="580" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1040" y="566" width="14" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_CarNo_Alternative_di" bpmnElement="Flow_CarNo_Alternative">
+        <di:waypoint x="1005" y="605" />
+        <di:waypoint x="1005" y="670" />
+        <di:waypoint x="720" y="670" />
+        <di:waypoint x="720" y="425" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1010" y="605" width="19" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Alternative_SelectCar_di" bpmnElement="Flow_Alternative_SelectCar">
+        <di:waypoint x="720" y="345" />
+        <di:waypoint x="720" y="223" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Book_StartedGateway_di" bpmnElement="Flow_Book_StartedGateway">
+        <di:waypoint x="1240" y="580" />
+        <di:waypoint x="1280" y="580" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_StartedYes_OpenCar_di" bpmnElement="Flow_StartedYes_OpenCar">
+        <di:waypoint x="1305" y="605" />
+        <di:waypoint x="1305" y="710" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1310" y="609" width="14" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_StartedNo_Cancel_di" bpmnElement="Flow_StartedNo_Cancel">
+        <di:waypoint x="1330" y="580" />
+        <di:waypoint x="1360" y="580" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1335" y="558" width="19" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Cancel_Cancelled_di" bpmnElement="Flow_Cancel_Cancelled">
+        <di:waypoint x="1450" y="620" />
+        <di:waypoint x="1450" y="732" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_OpenCar_Photo_di" bpmnElement="Flow_OpenCar_Photo">
+        <di:waypoint x="1250" y="710" />
+        <di:waypoint x="1250" y="180" />
+        <di:waypoint x="1380" y="180" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Photo_StartTrip_di" bpmnElement="Flow_Photo_StartTrip">
+        <di:waypoint x="1550" y="180" />
+        <di:waypoint x="1660" y="180" />
+        <di:waypoint x="1660" y="600" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_StartTrip_ParallelSplit_di" bpmnElement="Flow_StartTrip_ParallelSplit">
+        <di:waypoint x="1760" y="640" />
+        <di:waypoint x="1810" y="640" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_ParallelSplit_Telemetry_di" bpmnElement="Flow_ParallelSplit_Telemetry">
+        <di:waypoint x="1860" y="640" />
+        <di:waypoint x="1960" y="640" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_ParallelSplit_Price_di" bpmnElement="Flow_ParallelSplit_Price">
+        <di:waypoint x="1835" y="665" />
+        <di:waypoint x="1835" y="720" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_ParallelSplit_Route_di" bpmnElement="Flow_ParallelSplit_Route">
+        <di:waypoint x="1835" y="615" />
+        <di:waypoint x="1835" y="425" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Telemetry_ParallelJoin_di" bpmnElement="Flow_Telemetry_ParallelJoin">
+        <di:waypoint x="2160" y="640" />
+        <di:waypoint x="2245" y="640" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Price_ParallelJoin_di" bpmnElement="Flow_Price_ParallelJoin">
+        <di:waypoint x="1980" y="750" />
+        <di:waypoint x="2270" y="750" />
+        <di:waypoint x="2270" y="665" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Route_ParallelJoin_di" bpmnElement="Flow_Route_ParallelJoin">
+        <di:waypoint x="1935" y="385" />
+        <di:waypoint x="2270" y="385" />
+        <di:waypoint x="2270" y="615" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_ParallelJoin_EndRental_di" bpmnElement="Flow_ParallelJoin_EndRental">
+        <di:waypoint x="2295" y="640" />
+        <di:waypoint x="2350" y="640" />
+        <di:waypoint x="2350" y="220" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_EndRental_Success_di" bpmnElement="Flow_EndRental_Success">
+        <di:waypoint x="2540" y="680" />
+        <di:waypoint x="2540" y="732" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1oe8j66_di" bpmnElement="Flow_1oe8j66">
+        <di:waypoint x="2445" y="180" />
+        <di:waypoint x="2540" y="180" />
+        <di:waypoint x="2540" y="600" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
