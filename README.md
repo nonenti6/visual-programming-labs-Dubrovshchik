@@ -7,3 +7,9 @@
 - `lab1/diagrams/` — графические диаграммы (BPMN, UML Activity)
 - `lab1/screenshots/` — скриншоты проделанной работы
 - `lab1/report.md` — отчёт по работе
+
+## Лабораторная работа №2. Node-RED
+
+- `lab2/docs/` — документация: `report.md` (отчёт), `api.md` (описание REST-эндпоинтов)
+- `lab2/flows/` — экспортированные потоки Node-RED
+- `lab2/screenshots/` — скриншоты проделанной работы

@@ -1,0 +1,9 @@
+# Node-RED runtime data
+node-red-data/
+
+# OS / editor
+.vscode/
+.DS_Store
+Thumbs.db
+*.log
+*.tmp
