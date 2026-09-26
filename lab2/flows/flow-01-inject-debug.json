@@ -1,0 +1,56 @@
+[
+    {
+        "id": "9fb8b6a1e16d1ab8",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "d5e10c059ce3d87b",
+        "type": "inject",
+        "z": "9fb8b6a1e16d1ab8",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "5",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "lab2/Dubrovshchik/basic",
+        "payload": "Dubrovshchik",
+        "payloadType": "str",
+        "x": 380,
+        "y": 280,
+        "wires": [
+            [
+                "fb2da895e82d694a"
+            ]
+        ]
+    },
+    {
+        "id": "fb2da895e82d694a",
+        "type": "debug",
+        "z": "9fb8b6a1e16d1ab8",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 580,
+        "y": 280,
+        "wires": []
+    }
+]
