@@ -1,0 +1,21 @@
+[
+    {
+        "id": "ddacd44c657b5161",
+        "type": "template",
+        "z": "a3d7c997521cf308",
+        "name": "",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "{\n  \"student\": \"{{payload.name}}\",\n  \"group\": \"{{payload.group}}\",\n  \"year\": {{payload.year}},\n  \"greeting\": \"Hello, {{payload.name}} from group {{payload.group}}!\"\n}",
+        "output": "json",
+        "x": 420,
+        "y": 340,
+        "wires": [
+            [
+                "20f9b985250ccfa7"
+            ]
+        ]
+    }
+]
