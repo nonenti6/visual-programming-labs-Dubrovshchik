@@ -1,0 +1,355 @@
+[
+    {
+        "id": "cf20182d9e5c27fd",
+        "type": "tab",
+        "label": "Flow A11 - Telegram",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "255b020e999dc3bb",
+        "type": "telegram receiver",
+        "z": "cf20182d9e5c27fd",
+        "name": "",
+        "bot": "a8f7e6edae86a4b5",
+        "saveDataDir": "",
+        "filterCommands": false,
+        "hasinput": false,
+        "inputs": 0,
+        "handleallupdates": false,
+        "handleprocessupdates": false,
+        "x": 170,
+        "y": 340,
+        "wires": [
+            [
+                "436513f561cc570e",
+                "2b46fcadd08b55f3"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "07e3b84314aaf445",
+        "type": "telegram command",
+        "z": "cf20182d9e5c27fd",
+        "name": "command start",
+        "command": "/start",
+        "description": "",
+        "registercommand": false,
+        "language": "",
+        "scope": "default",
+        "bot": "a8f7e6edae86a4b5",
+        "strict": false,
+        "hasresponse": true,
+        "useregex": false,
+        "removeregexcommand": false,
+        "outputs": 2,
+        "x": 412,
+        "y": 295,
+        "wires": [
+            [
+                "e8aa2a712dba9f4e"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "1a3e4bb79f5632da",
+        "type": "telegram sender",
+        "z": "cf20182d9e5c27fd",
+        "name": "",
+        "bot": "a8f7e6edae86a4b5",
+        "haserroroutput": false,
+        "outputs": 1,
+        "x": 882,
+        "y": 295,
+        "wires": [
+            [
+                "2b46fcadd08b55f3"
+            ]
+        ]
+    },
+    {
+        "id": "2b46fcadd08b55f3",
+        "type": "debug",
+        "z": "cf20182d9e5c27fd",
+        "name": "my debug",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1142,
+        "y": 335,
+        "wires": []
+    },
+    {
+        "id": "e8aa2a712dba9f4e",
+        "type": "function",
+        "z": "cf20182d9e5c27fd",
+        "name": "reply /start",
+        "func": "// Из входящего сообщения берём chatId\nconst chatId = msg.payload.chatId;\n\n// Формируем ответ для telegram sender\nmsg.payload = {\n    chatId: chatId,\n    type: \"message\",\n    content: \n        \"Привет! Я бот лабораторной работы №2.\\n\" +\n        \"Студент: Dubrovshchik\\n\\n\" +\n        \"Доступные команды:\\n\" +\n        \"/start — показать это сообщение\\n\" +\n        \"/sixseven — секрет)\\n\\n\" +\n        \"Просто напиши любое сообщение — я отвечу эхом.\\n\\n\" +\n        \"Ачивка 11. Telegram inline keyboard: \\n\" +\n        \"Доступные команды:\\n\" +\n        \"/menu - просмотреть меню\"\n};\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 642,
+        "y": 295,
+        "wires": [
+            [
+                "1a3e4bb79f5632da"
+            ]
+        ]
+    },
+    {
+        "id": "d8d8adcb19aaa112",
+        "type": "telegram command",
+        "z": "cf20182d9e5c27fd",
+        "name": "command /sixseven",
+        "command": "/sixseven",
+        "description": "",
+        "registercommand": false,
+        "language": "",
+        "scope": "default",
+        "bot": "a8f7e6edae86a4b5",
+        "strict": false,
+        "hasresponse": true,
+        "useregex": false,
+        "removeregexcommand": false,
+        "outputs": 2,
+        "x": 422,
+        "y": 375,
+        "wires": [
+            [
+                "f0457f2f95f26384"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "f0457f2f95f26384",
+        "type": "function",
+        "z": "cf20182d9e5c27fd",
+        "name": "reply sixseven",
+        "func": "const chatId = msg.payload.chatId;\n\nmsg.payload = {\n    chatId: chatId,\n    type: \"photo\",\n    content: \"https://static.wikia.nocookie.net/mems/images/8/8d/670.jpg/revision/latest?cb=20260203175705&path-prefix=ru\",\n    caption: \"6 7 🤙\"\n};\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 652,
+        "y": 375,
+        "wires": [
+            [
+                "4c26b50e813193d5"
+            ]
+        ]
+    },
+    {
+        "id": "4c26b50e813193d5",
+        "type": "telegram sender",
+        "z": "cf20182d9e5c27fd",
+        "name": "",
+        "bot": "a8f7e6edae86a4b5",
+        "haserroroutput": false,
+        "outputs": 1,
+        "x": 882,
+        "y": 375,
+        "wires": [
+            [
+                "2b46fcadd08b55f3"
+            ]
+        ]
+    },
+    {
+        "id": "b99c9188a6bdeb8c",
+        "type": "telegram sender",
+        "z": "cf20182d9e5c27fd",
+        "name": "",
+        "bot": "a8f7e6edae86a4b5",
+        "haserroroutput": false,
+        "outputs": 1,
+        "x": 882,
+        "y": 455,
+        "wires": [
+            [
+                "2b46fcadd08b55f3"
+            ]
+        ]
+    },
+    {
+        "id": "436513f561cc570e",
+        "type": "function",
+        "z": "cf20182d9e5c27fd",
+        "name": "echo",
+        "func": "const text = msg.payload.content;\nconst chatId = msg.payload.chatId;\n\n// Если это команда — не эхо\nif (text && text.startsWith(\"/\")) {\n    return null;\n}\n\n// Иначе — эхо\nmsg.payload = {\n    chatId: chatId,\n    type: \"message\",\n    content: \"Ты написал: \" + text\n};\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 382,
+        "y": 455,
+        "wires": [
+            [
+                "b99c9188a6bdeb8c"
+            ]
+        ]
+    },
+    {
+        "id": "1d1c4109ad0573dd",
+        "type": "telegram command",
+        "z": "cf20182d9e5c27fd",
+        "name": "command /menu ",
+        "command": "/menu",
+        "description": "",
+        "registercommand": false,
+        "language": "",
+        "scope": "default",
+        "bot": "a8f7e6edae86a4b5",
+        "strict": false,
+        "hasresponse": true,
+        "useregex": false,
+        "removeregexcommand": false,
+        "outputs": 2,
+        "x": 420,
+        "y": 580,
+        "wires": [
+            [
+                "2beff1e57072f472"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "2beff1e57072f472",
+        "type": "function",
+        "z": "cf20182d9e5c27fd",
+        "name": "show menu",
+        "func": "const chatId = msg.payload.chatId;\n\nmsg.payload = {\n    chatId: chatId,\n    type: \"message\",\n    content: \"🍽 Меню ресторана\\n\\nВыберите блюдо:\",\n    options: {\n        reply_markup: {\n            inline_keyboard: [\n                [{ text: \"🍕 Пицца\",  callback_data: \"order:pizza\" }],\n                [{ text: \"🍣 Суши\",   callback_data: \"order:sushi\" }],\n                [{ text: \"🍔 Бургер\", callback_data: \"order:burger\" }]\n            ]\n        }\n    }\n};\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 650,
+        "y": 580,
+        "wires": [
+            [
+                "83ee956b72fc5a80"
+            ]
+        ]
+    },
+    {
+        "id": "83ee956b72fc5a80",
+        "type": "telegram sender",
+        "z": "cf20182d9e5c27fd",
+        "name": "sender menu",
+        "bot": "a8f7e6edae86a4b5",
+        "haserroroutput": false,
+        "outputs": 1,
+        "x": 870,
+        "y": 580,
+        "wires": [
+            [
+                "2b46fcadd08b55f3"
+            ]
+        ]
+    },
+    {
+        "id": "e34c1c6ba347b1c3",
+        "type": "function",
+        "z": "cf20182d9e5c27fd",
+        "name": "handle callback",
+        "func": "// Достаём данные из callback\nconst chatId = msg.payload.chatId;\nconst data   = msg.payload.content;  // здесь лежит строка типа \"order:pizza\"\n\nif (!data) {\n    node.warn(\"Пустой callback_data\");\n    return null;\n}\n\nconst parts = data.split(\":\");  // [\"order\", \"pizza\"] или [\"confirm\", \"yes\", \"pizza\"]\n\nlet content;\nlet keyboard;\n\nif (parts[0] === \"order\") {\n    // Пользователь выбрал блюдо — показываем подтверждение\n    const dish = parts[1];\n    content = \"Вы выбрали: \" + dish + \".\\nПодтверждаете заказ?\";\n    keyboard = {\n        inline_keyboard: [\n            [{ text: \"✅ Да\",  callback_data: \"confirm:yes:\" + dish }],\n            [{ text: \"❌ Нет\", callback_data: \"confirm:no\" }]\n        ]\n    };\n\n} else if (parts[0] === \"confirm\" && parts[1] === \"yes\") {\n    // Подтверждение заказа\n    const dish = parts[2];\n    content = \"✅ Заказ оформлен: \" + dish + \"!\\nОжидайте доставку 🚀\";\n    keyboard = {\n        inline_keyboard: [\n            [{ text: \"⬅️ Назад в меню\", callback_data: \"back:menu\" }]\n        ]\n    };\n\n} else if (parts[0] === \"confirm\" && parts[1] === \"no\") {\n    // Отмена\n    content = \"Ок, заказ отменён.\";\n    keyboard = {\n        inline_keyboard: [\n            [{ text: \"🍽 В меню\", callback_data: \"back:menu\" }]\n        ]\n    };\n\n} else if (parts[0] === \"back\") {\n    // Возврат в меню\n    content = \"🍽 Меню ресторана\\n\\nВыберите блюдо:\";\n    keyboard = {\n        inline_keyboard: [\n            [{ text: \"🍕 Пицца\",  callback_data: \"order:pizza\" }],\n            [{ text: \"🍣 Суши\",   callback_data: \"order:sushi\" }],\n            [{ text: \"🍔 Бургер\", callback_data: \"order:burger\" }]\n        ]\n    };\n\n} else {\n    content = \"Неизвестное действие.\";\n    keyboard = null;\n}\n\nmsg.payload = {\n    chatId: chatId,\n    type: \"message\",\n    content: content,\n    options: {\n        reply_markup: keyboard\n    }\n};\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 680,
+        "y": 660,
+        "wires": [
+            [
+                "f35ccf88e36dec61"
+            ]
+        ]
+    },
+    {
+        "id": "f35ccf88e36dec61",
+        "type": "telegram sender",
+        "z": "cf20182d9e5c27fd",
+        "name": "sender callback",
+        "bot": "a8f7e6edae86a4b5",
+        "haserroroutput": false,
+        "outputs": 1,
+        "x": 880,
+        "y": 660,
+        "wires": [
+            [
+                "2b46fcadd08b55f3"
+            ]
+        ]
+    },
+    {
+        "id": "0d099a30090a11b7",
+        "type": "telegram event",
+        "z": "cf20182d9e5c27fd",
+        "name": "",
+        "bot": "a8f7e6edae86a4b5",
+        "event": "callback_query",
+        "autoanswer": false,
+        "x": 420,
+        "y": 660,
+        "wires": [
+            [
+                "e34c1c6ba347b1c3"
+            ]
+        ]
+    },
+    {
+        "id": "a8f7e6edae86a4b5",
+        "type": "telegram bot",
+        "botname": "lab2_bot",
+        "usernames": "",
+        "chatids": "",
+        "baseapiurl": "",
+        "testenvironment": false,
+        "updatemode": "polling",
+        "pollinterval": 300,
+        "usesocks": false,
+        "sockshost": "",
+        "socksprotocol": "socks5",
+        "socksport": 6667,
+        "socksusername": "anonymous",
+        "sockspassword": "",
+        "bothost": "",
+        "botpath": "",
+        "localbothost": "0.0.0.0",
+        "localbotport": 8443,
+        "publicbotport": 8443,
+        "privatekey": "",
+        "certificate": "",
+        "useselfsignedcertificate": false,
+        "sslterminated": false,
+        "verboselogging": false
+    },
+    {
+        "id": "78a466584fe7bab4",
+        "type": "global-config",
+        "env": [],
+        "modules": {
+            "node-red-contrib-telegrambot": "19.0.3"
+        }
+    }
+]
