@@ -1,0 +1,93 @@
+[
+    {
+        "id": "eb3f2f74eaf2cb12",
+        "type": "tab",
+        "label": "Flow 4 - Change",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "8fa9bcc3272c6845",
+        "type": "inject",
+        "z": "eb3f2f74eaf2cb12",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "hello",
+        "payloadType": "str",
+        "x": 190,
+        "y": 340,
+        "wires": [
+            [
+                "de2cc53b47858061"
+            ]
+        ]
+    },
+    {
+        "id": "de2cc53b47858061",
+        "type": "change",
+        "z": "eb3f2f74eaf2cb12",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "lab2/Dubrovshchik/change",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "timestamp",
+                "pt": "msg",
+                "to": "",
+                "tot": "date"
+            },
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "Hello from Change node, Dubrovshchik",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 420,
+        "y": 340,
+        "wires": [
+            [
+                "8efbdbe883df0def"
+            ]
+        ]
+    },
+    {
+        "id": "8efbdbe883df0def",
+        "type": "debug",
+        "z": "eb3f2f74eaf2cb12",
+        "name": "debug change",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 680,
+        "y": 340,
+        "wires": []
+    }
+]
