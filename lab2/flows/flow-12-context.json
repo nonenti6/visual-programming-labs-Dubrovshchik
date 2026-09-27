@@ -1,0 +1,72 @@
+[
+    {
+        "id": "7a8d2f6a9d4e1607",
+        "type": "tab",
+        "label": "Flow 12 - Context",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "eb3393d231e6e03a",
+        "type": "inject",
+        "z": "7a8d2f6a9d4e1607",
+        "name": "counter tick",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "str",
+        "x": 350,
+        "y": 380,
+        "wires": [
+            [
+                "2aaf4c098feb8ce0"
+            ]
+        ]
+    },
+    {
+        "id": "2aaf4c098feb8ce0",
+        "type": "function",
+        "z": "7a8d2f6a9d4e1607",
+        "name": "counter",
+        "func": "// Читаем текущее значение счётчика из flow context\n// Если его ещё нет — начинаем с 0\nlet counter = flow.get(\"counter\") || 0;\n\n// Увеличиваем\ncounter = counter + 1;\n\n// Записываем обратно\nflow.set(\"counter\", counter);\n\n// Формируем ответ\nmsg.payload = {\n    counter: counter,\n    message: \"Счётчик увеличился\",\n    timestamp: new Date().toISOString()\n};\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 560,
+        "y": 380,
+        "wires": [
+            [
+                "b033ca670d1702eb"
+            ]
+        ]
+    },
+    {
+        "id": "b033ca670d1702eb",
+        "type": "debug",
+        "z": "7a8d2f6a9d4e1607",
+        "name": "debug counter",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 780,
+        "y": 380,
+        "wires": []
+    }
+]
