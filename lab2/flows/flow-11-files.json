@@ -1,0 +1,153 @@
+[
+    {
+        "id": "a85ee5aa812be96a",
+        "type": "tab",
+        "label": "Flow 11 - Files",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "cf1da65c044387a3",
+        "type": "inject",
+        "z": "a85ee5aa812be96a",
+        "name": "write file",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "str",
+        "x": 260,
+        "y": 300,
+        "wires": [
+            [
+                "b2048a6ed53972d2"
+            ]
+        ]
+    },
+    {
+        "id": "b2048a6ed53972d2",
+        "type": "function",
+        "z": "a85ee5aa812be96a",
+        "name": "prepare data",
+        "func": "// Формируем объект с данными\nconst data = {\n    author: \"Dubrovshchik\",\n    written_at: new Date().toISOString(),\n    random_number: Math.floor(Math.random() * 100),\n    note: \"This data was written from Node-RED flow-11\"\n};\n\n// Красиво форматируем JSON (с отступами)\nmsg.payload = JSON.stringify(data, null, 2);\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 490,
+        "y": 300,
+        "wires": [
+            [
+                "3960ad5d6a4293c7"
+            ]
+        ]
+    },
+    {
+        "id": "3960ad5d6a4293c7",
+        "type": "file",
+        "z": "a85ee5aa812be96a",
+        "name": "file out",
+        "filename": "/data/lab2-data.json",
+        "filenameType": "str",
+        "appendNewline": false,
+        "createDir": true,
+        "overwriteFile": "true",
+        "encoding": "utf8",
+        "x": 690,
+        "y": 300,
+        "wires": [
+            [
+                "466f2af97056d79e"
+            ]
+        ]
+    },
+    {
+        "id": "9bcf02b572657877",
+        "type": "inject",
+        "z": "a85ee5aa812be96a",
+        "name": "read file",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "str",
+        "x": 250,
+        "y": 400,
+        "wires": [
+            [
+                "d4bc9ae313bedcb6"
+            ]
+        ]
+    },
+    {
+        "id": "8dc1647ea5159714",
+        "type": "debug",
+        "z": "a85ee5aa812be96a",
+        "name": "debug read file",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 700,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "d4bc9ae313bedcb6",
+        "type": "file in",
+        "z": "a85ee5aa812be96a",
+        "name": "file in",
+        "filename": "/data/lab2-data.json",
+        "filenameType": "str",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "utf8",
+        "allProps": false,
+        "x": 470,
+        "y": 400,
+        "wires": [
+            [
+                "8dc1647ea5159714"
+            ]
+        ]
+    },
+    {
+        "id": "466f2af97056d79e",
+        "type": "debug",
+        "z": "a85ee5aa812be96a",
+        "name": "debug write file",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 940,
+        "y": 300,
+        "wires": []
+    }
+]
