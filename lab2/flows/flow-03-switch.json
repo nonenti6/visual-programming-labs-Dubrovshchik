@@ -1,0 +1,27 @@
+[
+    {
+        "id": "9df496ee767b9230",
+        "type": "inject",
+        "z": "592fb72e341844e9",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "{\"numbers\": [1, 2, 5]}",
+        "payloadType": "json",
+        "x": 170,
+        "y": 360,
+        "wires": [
+            [
+                "7eab8a242060f1b0"
+            ]
+        ]
+    }
+]
