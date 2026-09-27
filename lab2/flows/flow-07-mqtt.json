@@ -1,0 +1,146 @@
+[
+    {
+        "id": "01addb7a66a24baf",
+        "type": "tab",
+        "label": "Flow 7 - MQTT",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "4ea2cb1a44a207ed",
+        "type": "inject",
+        "z": "01addb7a66a24baf",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "5",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "str",
+        "x": 210,
+        "y": 320,
+        "wires": [
+            [
+                "210dbdaa79cad673"
+            ]
+        ]
+    },
+    {
+        "id": "210dbdaa79cad673",
+        "type": "function",
+        "z": "01addb7a66a24baf",
+        "name": "random value",
+        "func": "// Генерируем случайное число (имитация датчика температуры)\nconst value = +(20 + Math.random() * 10).toFixed(2);\n\n// Формируем объект\nconst data = {\n    value: value,\n    unit: \"C\",\n    timestamp: new Date().toISOString()\n};\n\n// payload — строка JSON, чтобы mqtt out отправил корректно\nmsg.payload = JSON.stringify(data);\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 440,
+        "y": 320,
+        "wires": [
+            [
+                "7485af70f664409c"
+            ]
+        ]
+    },
+    {
+        "id": "045433ddea879288",
+        "type": "mqtt in",
+        "z": "01addb7a66a24baf",
+        "name": "MQTT subscribe",
+        "topic": "student/Dubrovshchik/lab2/temp",
+        "qos": "2",
+        "datatype": "json",
+        "broker": "03c7b0f671ef2a96",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 320,
+        "y": 460,
+        "wires": [
+            [
+                "d06252fa63272c4b"
+            ]
+        ]
+    },
+    {
+        "id": "7485af70f664409c",
+        "type": "mqtt out",
+        "z": "01addb7a66a24baf",
+        "name": "MQTT publish",
+        "topic": "student/Dubrovshchik/lab2/temp",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "03c7b0f671ef2a96",
+        "x": 660,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "d06252fa63272c4b",
+        "type": "debug",
+        "z": "01addb7a66a24baf",
+        "name": "debug mqtt",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 530,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "03c7b0f671ef2a96",
+        "type": "mqtt-broker",
+        "name": "hivemq public",
+        "broker": "broker.hivemq.com",
+        "port": 1883,
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": 4,
+        "keepalive": 60,
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    }
+]
