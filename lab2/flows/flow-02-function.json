@@ -1,0 +1,76 @@
+[
+    {
+        "id": "6a8160880f40b635",
+        "type": "tab",
+        "label": "Flow 2",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "1fd5e5e489f7b110",
+        "type": "inject",
+        "z": "6a8160880f40b635",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "{\"numbers\":[1,2,3,4,5],\"limit\":3,\"name\":\"Dubrovshchik\"}",
+        "payloadType": "json",
+        "x": 270,
+        "y": 340,
+        "wires": [
+            [
+                "53f74f27532ebcdd"
+            ]
+        ]
+    },
+    {
+        "id": "53f74f27532ebcdd",
+        "type": "function",
+        "z": "6a8160880f40b635",
+        "name": "function 1",
+        "func": "// Получаем входные данные\nconst input = msg.payload;\n\n// Проверяем, что пришёл ожидаемый объект\nif (!input || !Array.isArray(input.numbers)) {\n    msg.payload = { error: \"ожидался объект с полем numbers (массив)\" };\n    return msg;\n}\n\n// Извлекаем поля (деструктуризация)\nconst { numbers, limit, name } = input;\n\n// Считаем сумму всех чисел циклом for\nlet sum = 0;\nfor (let i = 0; i < numbers.length; i++) {\n    sum += numbers[i];\n}\n\n// Фильтруем массив: оставляем числа больше limit\nconst filtered = [];\nfor (let i = 0; i < numbers.length; i++) {\n    if (numbers[i] > limit) {\n        filtered.push(numbers[i]);\n    }\n}\n\n// Формируем объект-результат\nconst result = {\n    author: name,\n    original: numbers,\n    limit: limit,\n    sum: sum,\n    aboveLimit: filtered,\n    count: filtered.length,\n    timestamp: new Date().toISOString()\n};\n\n// Возвращаем сообщение с payload-объектом\nmsg.payload = result;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 480,
+        "y": 340,
+        "wires": [
+            [
+                "d8033c467e02aea3"
+            ]
+        ]
+    },
+    {
+        "id": "d8033c467e02aea3",
+        "type": "debug",
+        "z": "6a8160880f40b635",
+        "name": "debug 2",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 680,
+        "y": 340,
+        "wires": []
+    }
+]
