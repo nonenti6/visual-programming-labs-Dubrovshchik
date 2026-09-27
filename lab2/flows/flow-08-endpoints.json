@@ -1,0 +1,155 @@
+[
+    {
+        "id": "dd58df26e07fa877",
+        "type": "tab",
+        "label": "Flow 8 - Endpoints",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "e54b50ed8462a660",
+        "type": "http in",
+        "z": "dd58df26e07fa877",
+        "name": "GET /api/text",
+        "url": "/api/text",
+        "method": "get",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 390,
+        "y": 220,
+        "wires": [
+            [
+                "865814dbaea5fb07"
+            ]
+        ]
+    },
+    {
+        "id": "fc757db741715e6b",
+        "type": "http response",
+        "z": "dd58df26e07fa877",
+        "name": "",
+        "statusCode": "200",
+        "headers": {},
+        "x": 840,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "865814dbaea5fb07",
+        "type": "template",
+        "z": "dd58df26e07fa877",
+        "name": "text response",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "Hello from Node-RED! This is a plain text response.",
+        "output": "str",
+        "x": 620,
+        "y": 220,
+        "wires": [
+            [
+                "fc757db741715e6b"
+            ]
+        ]
+    },
+    {
+        "id": "754a336f8dd629a8",
+        "type": "http in",
+        "z": "dd58df26e07fa877",
+        "name": "GET /api/info",
+        "url": "/api/info",
+        "method": "get",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 390.0000228881836,
+        "y": 378.99999046325684,
+        "wires": [
+            [
+                "780b8bbf3768af8d"
+            ]
+        ]
+    },
+    {
+        "id": "780b8bbf3768af8d",
+        "type": "template",
+        "z": "dd58df26e07fa877",
+        "name": "info response",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "{\n  \"service\": \"Node-RED Lab 2\",\n  \"author\": \"Dubrovshchik\"\n}",
+        "output": "json",
+        "x": 620.0000228881836,
+        "y": 378.99999046325684,
+        "wires": [
+            [
+                "44396fab9a685125"
+            ]
+        ]
+    },
+    {
+        "id": "44396fab9a685125",
+        "type": "http response",
+        "z": "dd58df26e07fa877",
+        "name": "",
+        "statusCode": "200",
+        "headers": {},
+        "x": 840.0000228881836,
+        "y": 378.99999046325684,
+        "wires": []
+    },
+    {
+        "id": "3e3b28b9cc45ae77",
+        "type": "http in",
+        "z": "dd58df26e07fa877",
+        "name": "GET /api/items/:id",
+        "url": "/api/items/:id",
+        "method": "get",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 410,
+        "y": 540,
+        "wires": [
+            [
+                "e6d799be1c85dd65"
+            ]
+        ]
+    },
+    {
+        "id": "76e829aef5dd5cd8",
+        "type": "http response",
+        "z": "dd58df26e07fa877",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 850,
+        "y": 540,
+        "wires": []
+    },
+    {
+        "id": "e6d799be1c85dd65",
+        "type": "function",
+        "z": "dd58df26e07fa877",
+        "name": "function 3",
+        "func": "// Path-параметр\nconst id = msg.req.params.id;\n\n// Query-параметры (после ?)\nconst query = msg.req.query;\n\n// \"База данных\" (в реальности — массив)\nconst items = [\n    { id: 1, name: \"Laptop\",    price: 1200 },\n    { id: 2, name: \"Mouse\",     price: 25 },\n    { id: 3, name: \"Keyboard\",  price: 80 },\n    { id: 4, name: \"Monitor\",   price: 300 }\n];\n\n// Проверяем, что id — число\nconst numericId = Number(id);\nif (!Number.isInteger(numericId) || numericId <= 0) {\n    msg.statusCode = 400;\n    msg.payload = {\n        error: \"Bad Request\",\n        message: \"Параметр id должен быть положительным целым числом\",\n        received: id\n    };\n    return msg;\n}\n\n// Ищем элемент\nconst item = items.find(i => i.id === numericId);\n\nif (!item) {\n    msg.statusCode = 404;\n    msg.payload = {\n        error: \"Not Found\",\n        message: \"Элемент с таким id не найден\",\n        id: numericId\n    };\n    return msg;\n}\n\n// Успех\nmsg.statusCode = 200;\nmsg.payload = {\n    item: item,\n    query: query,\n    requested_at: new Date().toISOString()\n};\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 620,
+        "y": 540,
+        "wires": [
+            [
+                "76e829aef5dd5cd8"
+            ]
+        ]
+    }
+]
