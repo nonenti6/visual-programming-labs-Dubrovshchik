@@ -93,56 +93,56 @@ docker run -d --name mynodered -p 1880:1880 -v /d/node-red-data:/data --restart 
 
 ### Часть 1. Установка и версии
 
-- ![Версия Node.js](screenshots/nodejs-version.png)
-- ![Версия Node-RED](screenshots/node-red-version.png)
+- ![Версия Node.js](../screenshots/nodejs-version.png)
+- ![Версия Node-RED](../screenshots/node-red-version.png)
 
 ### 2.1. Inject → Debug
 
-- ![flow-01](screenshots/01-inject-debug.png)
+- ![flow-01](../screenshots/01-inject-debug.png)
 
 ### 2.2. Function
 
-- ![flow-02](screenshots/02-function.png)
+- ![flow-02](../screenshots/02-function.png)
 
 ### 2.3. Switch
 
-- ![flow-03](screenshots/03-switch.png)
+- ![flow-03](../screenshots/03-switch.png)
 
 ### 2.4. Change
 
-- ![flow-04](screenshots/04-change.png)
+- ![flow-04](../screenshots/04-change.png)
 
 ### 2.5. Template
 
-- ![flow-05](screenshots/05-template.png)
+- ![flow-05](../screenshots/05-template.png)
 
 ### 2.6. HTTP Request
 
-- ![flow-06](screenshots/06-http-request.png)
+- ![flow-06](../screenshots/06-http-request.png)
 
 ### 2.7. MQTT
 
-- ![flow-07](screenshots/07-mqtt.png)
+- ![flow-07](../screenshots/07-mqtt.png)
 
 ### 2.8. Endpoints
 
-- ![flow-08 общий](screenshots/08-endpoints.png)
-- ![08a text](screenshots/08a-text.png)
-- ![08b info](screenshots/08b-info.png)
-- ![08c items success](screenshots/08c-items-success.png)
-- ![08d items 404](screenshots/08d-items-404.png)
-- ![08e items 400](screenshots/08e-items-400.png)
+- ![flow-08 общий](../screenshots/08-endpoints.png)
+- ![08a text](../screenshots/08a-text.png)
+- ![08b info](../screenshots/08b-info.png)
+- ![08c items success](../screenshots/08c-items-success.png)
+- ![08d items 404](../screenshots/08d-items-404.png)
+- ![08e items 400](../screenshots/08e-items-400.png)
 
 ### 2.9. Dashboard
 
-- ![flow-09](screenshots/09-dashboard.png)
-- ![flow-09a dashboard UI](screenshots/09a-dashboard.png)
+- ![flow-09](../screenshots/09-dashboard.png)
+- ![flow-09a dashboard UI](../screenshots/09a-dashboard.png)
 
 ### 2.10. Telegram
 
-- ![flow-10](screenshots/10-telegram.png)
-- ![10a BotFather](screenshots/10a-telegram-father.png)
-- ![10b chat](screenshots/10b-telegram-chat.png)
+- ![flow-10](../screenshots/10-telegram.png)
+- ![10a BotFather](../screenshots/10a-telegram-father.png)
+- ![10b chat](../screenshots/10b-telegram-chat.png)
 
 ### 2.11. Файлы
 
@@ -152,13 +152,13 @@ docker run -d --name mynodered -p 1880:1880 -v /d/node-red-data:/data --restart 
 
 ### 2.12. Контекст
 
-- ![flow-12](screenshots/12-context.png)
-- ![12a counter flow](screenshots/12a-counter.png)
-- ![12b counter](screenshots/12b-counter.png)
+- ![flow-12](../screenshots/12-context.png)
+- ![12a counter flow](../screenshots/12a-counter.png)
+- ![12b counter](../screenshots/12b-counter.png)
 
 ### Ачивка 11. Telegram Inline Keyboard
 
-- ![achievement-11](screenshots/achievement-11-telegram.png)
+- ![achievement-11](../screenshots/achievement-11-telegram.png)
 
 ## Выводы
 
