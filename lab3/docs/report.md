@@ -25,7 +25,7 @@
 5. **«Создание и редактирование привычек» (MODERATE)**
 6. **«Интерактивные элементы для отслеживания прогресса» (CHALLENGING)**
 
-Скриншот: `../screenshots/02-buildguide-01.png`
+![Build Guides](../screenshots/02-buildguide-01.png)
 
 ### Что показалось полезным
 
@@ -45,7 +45,8 @@
 - интерактивные отметки по дням недели (Пн–Вс);
 - счётчик серии дней подряд («N дней подряд»).
 
-Скриншоты: '../screenshots/02-before1.png', '../screenshots/02-before2.png'
+![Before](../screenshots/02-before1.png)
+![Before](../screenshots/02-before2.png)
 
 ## Часть 3. Ручная доработка UI
 ## Часть 4. Data и Workflows
