@@ -1,4 +1,4 @@
-## Часть 1. Установка и запуск Node-RED
+# Отчёт по лабораторной работе №3. Bubble
 
 **Способ установки:** Docker Desktop (образ `nodered/node-red:latest-22`)
 
